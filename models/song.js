@@ -1,8 +1,26 @@
 'use strict'
 
-// <Define a model using bookshelf that describes a song object, as well as 
-// static methods for getting one or all songs from the db>
+const { bookshelf } = require('../musichistory')
 
-// When adding the 'table' property use your old friend DB Browser for SQLite to 
-// open up the musichistory db and inspect the tables. Add the appropriate table name for 
-// interfacing with the songs collection
+// <Define a model using bookshelf that describes a song object, and
+// static methods for getting one or all songs from the db>
+// tableName should come from DB browser
+const Song = bookshelf.Model.extend({
+  tableName: 'Song',
+}, {
+  getAll: function() {
+    console.log('Get all the shows')
+    return this.forge()
+    .fetchAll()
+    .then(rows => return rows)
+    .catch(err => return err)
+  },
+  getSingle: function(id) {
+    return this.forge({id})
+    .fetch()
+    .then(show => return show)
+    .catch(err => return err)
+  }
+})
+
+module.exports = bookshelf.model('Song', Song)
