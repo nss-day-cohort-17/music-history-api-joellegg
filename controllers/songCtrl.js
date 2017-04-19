@@ -18,7 +18,7 @@ module.exports.getSong = ({params: {id}}, res, next) => {
 }
 
 // <stretch goal: methods for adding, deleting, editing a song>
-// curl --request POST --data "{ \"SongId\": 24, \"Title\": \"Tongue Tied\", \"SongLength\": 425, \"ReleaseDate\": \"8/5/2014\", \"GenreId\": 13, \"ArtistId\": 7, \"AlbumId\": 23 }" http://127.0.0.1:3000/api/v1/songs/new --header "Content-Type: application/json"
+
 module.exports.addSong = ({body}, res, next) => {
   Songly.forge(body)
   .save()
@@ -27,8 +27,14 @@ module.exports.addSong = ({body}, res, next) => {
 }
 
 module.exports.deleteSong = ({params: {id}}, res, next) => {
-  Songly.forge({id})
+  Songly.forge({SongId: id})
+  .where('SongId', '=', id)
   .destroy()
   .then(song => res.status(202).json(song))
   .catch(err => next(err))
+}
+
+module.exports.updateSong = ({body}, res, next) => {
+  Songly.forge(body)
+  .save()
 }
