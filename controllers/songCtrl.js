@@ -34,7 +34,10 @@ module.exports.deleteSong = ({params: {id}}, res, next) => {
   .catch(err => next(err))
 }
 
-module.exports.updateSong = ({body}, res, next) => {
-  Songly.forge(body)
-  .save()
+module.exports.updateSong = ({body, params: {id}}, res, next) => {
+  Songly.forge()
+  .where('SongId', '=', id)
+  .save(body, {method: 'update'})
+  .then(() => res.status(201).json({'msg': 'Song updated successfully'}))
+  .catch(err => next(err))
 }
